@@ -1,0 +1,34 @@
+@mixin vh-center($dir: row) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $dir;
+}
+
+@mixin ellipse {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin flex-r {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin position-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+@mixin pseudo-element($left, $top) {
+  position: absolute;
+  top: $top;
+  left: $left;
+  display: block;
+  overflow: hidden;
+  content: '';
+}
