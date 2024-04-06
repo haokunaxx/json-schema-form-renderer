@@ -27,10 +27,10 @@ module.exports = {
     '**/*.yaml'
   ],
   rules: {
-    "declaration-block-no-duplicate-properties": [
+    'declaration-block-no-duplicate-properties': [
       true,
       {
-        ignore: ["consecutive-duplicates-with-different-syntaxes"]
+        ignore: ['consecutive-duplicates-with-different-syntaxes']
       }
     ],
     'at-rule-no-unknown': [

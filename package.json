@@ -6,9 +6,9 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx",
-    "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
-    "lint:style": "stylelint \"./**/*.{css,scss,vue,html}\" --fix",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx && git add .",
+    "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\" && git add .",
+    "lint:style": "stylelint \"./**/*.{css,scss,vue,html}\" --fix && git add .",
     "prepare:husky": "husky install"
   },
   "dependencies": {
