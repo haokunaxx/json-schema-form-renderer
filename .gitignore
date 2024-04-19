@@ -1,3 +1,5 @@
+tests/
+
 components.d.ts
 auto-import.d.ts
 # Logs

@@ -25,12 +25,14 @@ export function timeFormat(timestamp = Date.now(), format = 'YYYY-MM-DD') {
   )
 }
 
-export function deepMerge(source: any = {}, target: any = {}) {
-  const res = cloneDeep(source)
-  for (const key in target) {
+// FIXME:
+export function deepMerge(mergeBase: any = {}, mergeWith: any = {}) {
+  const res = cloneDeep(mergeBase)
+  for (const key in res) {
+    console.log('dm: ', key, res[key])
     res[key] = isObject(res[key])
-      ? deepMerge(res[key], target[key])
-      : (res[key] = target[key])
+      ? deepMerge(res[key], mergeWith[key])
+      : (res[key] = mergeWith[key] ? mergeWith[key] : res[key])
   }
   return res
 }

@@ -19,8 +19,11 @@
               v-for="col in row"
               :key="col.field"
               v-bind="col"
+              :disabled="disabled"
               :model="model"
               :schema="col"
+              :rowData="listData[index]"
+              :rowIndex="index"
             />
           </ElRow>
         </ElCol>
@@ -94,6 +97,7 @@ const RenderItem = defineAsyncComponent(
 const props = defineProps<ListBasicProps>()
 
 const {
+  listData,
   renderList,
   add,
   removeByIndex,

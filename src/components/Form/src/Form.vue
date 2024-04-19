@@ -42,8 +42,9 @@ import { omit } from '@/utils'
 import type { FormInstance } from 'element-plus'
 import type {
   FormActionProps,
-  FormActionMethods,
-  FormActionEmitParams
+  FormActionUtils,
+  FormActionEmitParams,
+  FormUtils
 } from '@/types/Form'
 import { type FormSchema } from '@/types/Schema'
 // import { FormItemType } from '@/types/Schema'
@@ -55,9 +56,11 @@ const emit = defineEmits(['reset', 'confirm'])
 const attrs = useAttrs(),
   slots = useSlots()
 const formRef = ref<Nullable<FormInstance>>(null)
-const formActionRef = ref<Nullable<FormActionMethods>>(null)
+const formActionRef = ref<Nullable<FormActionUtils>>(null)
 
-const [renderSchema, formModel] = useFormDataInit(toRefs(props).schema)
+const [renderSchema, formModel, schemaAndModelOperationFns] = useFormDataInit(
+  toRefs(props).schema
+)
 // console.log(renderSchema, formModel)
 // console.log(slots, omit(slots, FormActionSlotNameList))
 const getFormItemSlots = computed(() => omit(slots, FormActionSlotNameList))
@@ -69,7 +72,8 @@ const getFormItemSlots = computed(() => omit(slots, FormActionSlotNameList))
 
 const formMethods = useFormMethods({
   formRef,
-  formModel
+  formModel,
+  schemaAndModelOperationFns
 })
 
 // 传递给 FormAction 的 props
@@ -79,7 +83,8 @@ const formActionProps = computed<FormActionProps>(() => ({
 
 // Form 组件暴露给父组件的方法，包含表单相关方法和 FormAction 暴露的组件方法
 const exposeMethods = {
-  ...formMethods,
+  ...(formMethods as FormUtils),
+  ...schemaAndModelOperationFns,
   startLoading: () => {
     formActionRef.value?.startLoading()
   },
@@ -87,6 +92,8 @@ const exposeMethods = {
     formActionRef.value?.stopLoading()
   }
 }
+
+// exposeMethods.setValueByPath
 
 provide(FormMethodsInjectKey, exposeMethods)
 

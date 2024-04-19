@@ -15,17 +15,26 @@ export enum FormItemType {
   FIELD = 'Field'
 }
 
-export interface SchemaFunctionTypePropertyBasicParams {
+export interface CallbackCommonParams {
   field: string //当前表单项字段field
   model: any //当前表单项字段的值
   schema: any //当前表单项的schema
   formModel: Readonly<Recordable> //整个表单的model
+
   setValueByPath: (path: string[], value: any) => void //根据路径更新表单项的值
   getValueByPath: (path: string[]) => any //根据路径获取表单项的值
+
+  setSchemaByPath?: (path: string[], schema: FormItemSchema) => void // 根据路径更新表单项的schema
+  appendSchemaByPath?: (path: string[], schema: FormItemSchema) => void // 根据路径在末尾追加表单项的schema
+  prependSchemaByPath?: (path: string[], schema: FormItemSchema) => void // 根据路径在开头追加表单项的schema
+
+  rowData?: any //行数据，如果是列表项的话
+  rowIndex?: number //行索引，如果是列表项的话
+  modelPath?: string[] //获取当前数据的路径数组
 }
 
 type BasicSchemaDependencyPropertyType =
-  | ((params: SchemaFunctionTypePropertyBasicParams) => boolean)
+  | ((params: CallbackCommonParams) => boolean)
   | boolean
 
 export interface BasicSchema {
@@ -73,9 +82,7 @@ export interface FieldSchema extends BasicSchema {
   > //el-form-item组件支持的属性
   rules?: FormItemRule[] //el-form-item rules
   // WAIT_FOR_TEST:
-  dynamicRules?: (
-    params: SchemaFunctionTypePropertyBasicParams
-  ) => FormItemRule[] //动态rules
+  dynamicRules?: (params: CallbackCommonParams) => FormItemRule[] //动态rules
   clearInputWhenIfShowFalse?: boolean //ifShow为false时清空表单值
 }
 

@@ -2,7 +2,7 @@ import {
   ElInput,
   ElInputNumber,
   ElCheckbox,
-  ElRadio,
+  // ElRadio,
   ElSwitch,
   ElRate,
   ElColorPicker,
@@ -25,7 +25,7 @@ export interface FieldProps {
   [Fields.Input]: Partial<InstanceType<typeof ElInput>>
   [Fields.InputNumber]: Partial<InstanceType<typeof ElInputNumber>>
   [Fields.Checkbox]: Partial<InstanceType<typeof ElCheckbox>>
-  [Fields.Radio]: Partial<InstanceType<typeof ElRadio>>
+  // [Fields.Radio]: Partial<InstanceType<typeof ElRadio>>
   [Fields.Switch]: Partial<InstanceType<typeof ElSwitch>>
   [Fields.Rate]: Partial<InstanceType<typeof ElRate>>
   [Fields.ColorPicker]: Partial<InstanceType<typeof ElColorPicker>>

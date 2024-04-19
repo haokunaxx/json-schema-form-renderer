@@ -1,9 +1,10 @@
 import type { FormInstance } from 'element-plus'
-import type { FormMethods, FormActionMethods } from '@/types/Form'
+import type { FormUtils, FormModelAndSchemaUtils } from '@/types'
 
 interface UseFormMethodsProps {
   formRef: Ref<Nullable<FormInstance>>
   formModel: Ref<Recordable>
+  schemaAndModelOperationFns: FormModelAndSchemaUtils
 }
 
 /**
@@ -29,42 +30,20 @@ interface UseFormMethodsProps {
  */
 export const useFormMethods = (
   props: UseFormMethodsProps
-): Omit<FormMethods, keyof FormActionMethods> => {
-  const { formModel, formRef } = props
+): Partial<FormUtils> => {
+  const {
+    formRef,
+    schemaAndModelOperationFns: { clearFormModel }
+  } = props
   return {
-    validate: () => {
-      console.log('validate')
-    },
+    validate: formRef.value?.validate,
+    validateField: formRef.value?.validateField,
+    clearValidate: formRef.value?.clearValidate,
+    scrollToField: formRef.value?.scrollToField,
+    resetFields: formRef.value?.resetFields,
     formActionLoading: () => {
       console.log('formActionLoading')
     },
-    /*
-      ['username']
-      ['part1', 'field1']
-      ['list1']
-      ['list1', '0']
-      ['list1', '0', 'listItemName']
-      ['list1', 'listItemName']
-    */
-    setValueByPath: (modelPath: string[], value: any) => {
-      let target = formModel.value
-      let i = 0
-      const len = modelPath.length - 1
-      for (; i < len; i++) {
-        target = target[modelPath[i]]
-      }
-      const lastPath = modelPath[i] as string
-      target[lastPath] = value
-    },
-    getValueByPath: (modelPath: string[]) => {
-      let res = formModel.value
-      for (let i = 0, len = modelPath.length; i < len; i++) {
-        res = res[modelPath[i]]
-      }
-      return res
-    },
-    resetFields: () => {
-      formRef.value?.resetFields()
-    }
+    clearFields: clearFormModel
   }
 }

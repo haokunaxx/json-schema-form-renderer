@@ -14,14 +14,15 @@ export const useList = (props: ListBasicProps) => {
   const rowDefaultData = JSON.parse(JSON.stringify(initialListData[0] || []))
 
   // 列表数据（不提供给外面）
-  // const listData = computed(() => {
-  //   return getValueByPath(props.parentPaths)
-  // })
+  const listData = computed(() => {
+    return getValueByPath(props.parentPaths)
+  })
 
   //用于渲染列表视图的数据
   const renderList = computed(() => {
     const { parentPaths, schema } = props
-    return getValueByPath(parentPaths).reduce((prev, _, index) => {
+    // return getValueByPath(parentPaths).reduce((prev, _, index) => {
+    return unref(listData).reduce((prev, _, index) => {
       prev.push(
         (schema.items || []).map((item) => {
           return {
@@ -84,6 +85,7 @@ export const useList = (props: ListBasicProps) => {
   const removeAll = () => {
     setValueByPath(props.parentPaths, [])
   }
+
   /**
    * 移动
    */
@@ -94,20 +96,24 @@ export const useList = (props: ListBasicProps) => {
     list.splice(dir === 'up' ? index - 1 : index + 1, 0, moveItem)
     setValueByPath(parentPaths, list)
   }
+
   /**
    * 上移一行
    */
   const moveUp = (index: number) => {
     move('up', index)
   }
+
   /**
    * 下移一行
    */
   const moveDown = (index: number) => {
     move('down', index)
   }
+
   /**
    * 根据索引复制行
+   * FIXME: Copy的列表项的表单值无法重置，看一下 ElForm的 resetFields方法的实现后或许可以找到解决方案
    */
   const copyByIndex = (index: number) => {
     const { parentPaths } = props
@@ -118,6 +124,7 @@ export const useList = (props: ListBasicProps) => {
   }
 
   return {
+    listData,
     renderList,
     add,
     removeByIndex,

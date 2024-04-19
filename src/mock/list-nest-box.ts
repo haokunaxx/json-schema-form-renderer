@@ -3,10 +3,23 @@ import { List, Fields, Box } from '@/utils'
 import type { BasicListComponentProps } from '@/components/Container/List/Basic'
 export const testListNestBoxSchema: FormSchema = {
   username: {
+    // type: FormItemType.FIELD,
+    // component: Fields.Switch,
+    // label: '用户名',
+    // defaultValue: true
     type: FormItemType.FIELD,
     component: Fields.Input,
     label: '用户名',
-    defaultValue: 'xuxin'
+    defaultValue: 'xuxin',
+    disabled: (params) => {
+      return params.model === 'disabled'
+    }
+  },
+  switch: {
+    type: FormItemType.FIELD,
+    component: Fields.Switch,
+    label: 'ces',
+    defaultValue: true
   },
   list: {
     label: '测试列表',
@@ -32,6 +45,11 @@ export const testListNestBoxSchema: FormSchema = {
         component: Fields.Input,
         label: '联系人',
         required: true,
+        disabled: (params) => {
+          const { rowData } = params
+          if (rowData['email'] === 'disabled@163.com') return true
+          return false
+        },
         defaultValue: '',
         colProps: {
           span: 12
@@ -42,8 +60,7 @@ export const testListNestBoxSchema: FormSchema = {
         component: Fields.Input,
         label: '联系方式（邮件）',
         // required: true,
-        required: (params) => {
-          console.log(params)
+        required: () => {
           return true
         },
         colProps: {
@@ -110,4 +127,31 @@ export const testListNestBoxSchema: FormSchema = {
       // }
     }
   }
+  // testCard: {
+  //   type: FormItemType.BOX,
+  //   label: '测试卡片',
+  //   component: Box.Card,
+  //   items: {
+  //     name2: {
+  //       type: FormItemType.FIELD,
+  //       component: Fields.Input,
+  //       label: '姓名2',
+  //       required: true,
+  //       defaultValue: 'list2-name',
+  //       colProps: {
+  //         span: 12
+  //       }
+  //     },
+  //     age2: {
+  //       type: FormItemType.FIELD,
+  //       component: Fields.Input,
+  //       label: '年龄2',
+  //       defaultValue: 'list2-age',
+  //       required: true,
+  //       colProps: {
+  //         span: 12
+  //       }
+  //     }
+  //   }
+  // }
 }

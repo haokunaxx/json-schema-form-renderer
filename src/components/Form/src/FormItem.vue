@@ -14,11 +14,7 @@ import {
   Fields
 } from '@/utils'
 
-import {
-  FormItemType,
-  FieldSchema,
-  SchemaFunctionTypePropertyBasicParams
-} from '@/types'
+import { FormItemType, FieldSchema, CallbackCommonParams } from '@/types'
 
 import type {
   FormItemSchemaForRender,
@@ -40,12 +36,20 @@ export default defineComponent({
       required: true
     },
     disabled: {
-      type: Boolean as PropType<boolean>,
+      type: Boolean as PropType<boolean | ((...params) => boolean)>,
       default: false
     },
     parentPaths: {
       type: Array as PropType<string[]>,
       default: () => []
+    },
+    rowData: {
+      type: Object as PropType<Recordable>,
+      default: () => undefined
+    },
+    rowIndex: {
+      type: Number as PropType<number>,
+      default: () => undefined
     }
   },
   setup(props, { slots, attrs }) {
@@ -53,7 +57,8 @@ export default defineComponent({
     const { schema, parentPaths } = props
     const { modelPath } = getPathObj([...parentPaths, schema.field])
     // --------------------------------------------------------------- Component status below
-    const getValues = computed<SchemaFunctionTypePropertyBasicParams>(() => {
+    const getValues = computed<CallbackCommonParams>(() => {
+      const { rowData, rowIndex } = props
       const { field } = props.schema
       return {
         field: field as string,
@@ -61,11 +66,20 @@ export default defineComponent({
         schema: readonly(props.schema),
         formModel: readonly(props.model),
 
-        // formSchema 暂不提供
+        // model utils
         setValueByPath: formMethods!.setValueByPath,
-        getValueByPath: formMethods!.getValueByPath
+        getValueByPath: formMethods!.getValueByPath,
+        // schema utils
+        setSchemaByPath: formMethods!.setSchemaByPath,
+        appendSchemaByPath: formMethods!.appendSchemaByPath,
+        prependSchemaByPath: formMethods!.prependSchemaByPath,
+
+        rowData,
+        rowIndex,
+        modelPath
       }
     })
+
     // disabled
     const getDisabled = computed(() => {
       const { disabled: propsDisabled } = props
@@ -75,6 +89,7 @@ export default defineComponent({
         : !!schemaDisabled
       return propsDisabled || isDisabled
     })
+
     // show
     const getShow = computed(() => {
       const { show = true, ifShow = true } = props.schema
